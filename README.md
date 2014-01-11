@@ -87,7 +87,7 @@ A generic version of this pattern which can work with any set of keys together w
 Getting started
 ---------------
 
-The map.js file exports the Map constructor. On the server-side, with Node.js, this is exported through `module.exports` and accessible with the `require` function. On the client-side, if *RequireJs* is being used, the constructor is registered as an anonymous module. If RequireJs is not present, the constructor is simply exported in a global variable `__vm__` as `__vm__.util.Map`. The following examples assume that the constructor is made available as a variable named `Map`. This can be set up as follows:
+The map.js file exports the Map constructor. On the server-side, with Node.js, this is exported through `module.exports` and accessible with the `require` function. On the client-side, if **RequireJs** is being used, the constructor is registered as an anonymous module. If RequireJs is not present, the constructor is simply exported in a global variable `__vm__` as `__vm__.util.Map`. The following examples assume that the constructor is made available as a variable named `Map`. This can be set up as follows:
 
 ```javascript
 // with RequireJs
