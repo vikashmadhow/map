@@ -124,7 +124,7 @@ Use the put and get methods for these operations. Keys can be specified in objec
 ```javascript
 templates.put({theme: "Blue", name: "Customer", action: "Add"}, "<form><div>...</div></form>");
 
-// keys can also be specified in string form in long and short forms
+// keys can also be specified as a string in long or short forms.
 // In short forms the key names are not specified, they are determined
 // by position:
 templates.put("theme:Blue/name:Customer/action:Edit", "<form><div>...</div></form>");
@@ -169,7 +169,7 @@ templates.each(function(key, value, map) {
 Testing
 --------
 
-Unit testing with Jasmine is included in the test folder. Simply open the SpecRunner.html or SpecRunnerWithAMD.html in a browser to execute the tests. The map specification is in the `test/spec/mapSpec.js` file  
+Unit testing with Jasmine is included in the test folder. Simply open the`test/SpecRunner.html` or `test/SpecRunnerWithAMD.html` in a browser to execute the tests. The map specification is in the `test/spec/mapSpec.js` file.
 
 Docs
 --------
