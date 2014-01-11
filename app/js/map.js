@@ -1,6 +1,6 @@
 /** @module Map
   * @desc This module exports the {@link module:Map.Map} class which implements
-  * a simple technique for creating a map using Javascript objects.
+  * a simple technique for creating a multi-key map in Javascript.
   *
   * Javascript arrays ([]) and objects ({}) can have objects as keys but, behind the scenes,
   * only string keys are supported. Objects are converted to string form by
@@ -14,21 +14,16 @@
   *
   * Suppose a Map is created with the key structure `{a: "a", b: "b", c: "c"}`
   * (the property values are irrelevant, only their names are used), this class will
-  * use a 3-levels array with property *a* indexing the 1<sup>st</sup> level, property *b* indexing
+  * use a 3-levels object with property *a* indexing the 1<sup>st</sup> level, property *b* indexing
   * the 2<sup>nd</sup> and property *c* indexing the 3<sup>rd</sup>. If we then call
-  * `map.put({a: "One", b: "Two", c: "Three}, "Test")`, the underlying array will be set to
-  * the following: `["One" -> ["Two" -> ["Three" -> "Test"]]]`.
+  * `map.put({a: "One", b: "Two", c: "Three}, "Test")`, the underlying object will be set to
+  * the following: `{"One" -> {"Two" -> {"Three" -> "Test"}}}`.
   *
-  * The benefits of this class is that it covers a lot of use-cases with very little
-  * code. It is also quite fast with a constant number of operations for accessing the
-  * value of any key. Given the key structure, this class also supports selecting
+  * The advantages of this class over a conventional hashmap is that it covers a lot of 
+  * use-cases with very little code. It is also quite fast with a constant number of operations 
+  * for accessing the value of any key. Given the key structure, this class also supports selecting
   * all associations reachable by following a prefix of the key; this can be useful
   * in situations where the key is only partially available.
-  *
-  * The cons of using this class is that it does not support multi-level objects (those
-  * having properties of type objects) as properties. Such properties are not expanded
-  * in the underlying array; they are used as keys directly which, as mentioned above, is not the
-  * desired behaviour in most cases.
   *
   * @author Vikash Madhow <vikash.madhow@gmail.com>
   * @license MIT
@@ -46,7 +41,7 @@
     define(factory);
   } 
   else {
-    // client-side without AMD. Register in a global namespace __vm__ as __vm__.Map
+    // client-side without AMD. Register in a global namespace __vm__ as __vm__.util.Map
     root.__vm__ = root.__vm__ || {};
     root.__vm__.util = root.__vm__.util || {};
     root.__vm__.util.Map = factory();
@@ -87,8 +82,9 @@
     * the sub-key `a`. For maps with very deep structure, select can be used to increase performance
     * when the prefix part of a key is fixed in a certain context (such as, e.g., inside a loop).
     *
-    * @param {object} structure - The key structure of the map with each non-function property
-    *                             in enumeration order becoming a sub-key of the constructed map.
+    * @param {object} structure - The key structure of the map. This can be supplied either as an object, 
+    *                             with each non-function property in enumeration order becoming a sub-key 
+    *                             of the constructed map(e.g. {a: "a", b: "b"}), or an array of key-names (e.g. ["a", "b"]).
     * @param {*} [defaultSubKeyValue] - An optional default value to use for missing sub-keys
     *                                   in keys supplied to the get and put method. If not supplied,
     *                                   this defaults to "_".
@@ -439,8 +435,9 @@
   /** Factory method which creates a map by invoking the constructor
     * with the specified structure and optional default sub-key value.
     *
-    * @param {object} structure - The key structure of the map with each non-function property
-    *                             in enumeration order becoming a sub-key of the constructed map.
+    * @param {object} structure -  The key structure of the map. This can be supplied either as an object, 
+    *                             with each non-function property in enumeration order becoming a sub-key 
+    *                             of the constructed map(e.g. {a: "a", b: "b"}), or an array of key-names (e.g. ["a", "b"]).
     * @param {*} [defaultSubKeyValue] - An optional default value to use for missing sub-keys
     *                                   in keys supplied to the get and put method. If not supplied,
     *                                   this defaults to "_".
