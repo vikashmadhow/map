@@ -164,8 +164,17 @@ templates.each(function(key, value, map) {
 });
 ```
 
-## Docs
+Testing
+--------
+
+Unit testing with Jasmine is included in the test folder. Simply open the SpecRunner.html or SpecRunnerWithAMD.html in a browser to execute the tests. The map specification is in the `test/spec/mapSpec.js` file  
+
+Docs
+--------
+
 Extensive documentation is included in the source code of `map.js` in JSDoc format. The JSDocs are also in the `docs` folder.
 
-## Contact
+Contact
+-------
+
 Contact me on `vikash.madhow@gmail.com` if you have any queries.
