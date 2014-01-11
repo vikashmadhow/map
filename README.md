@@ -80,9 +80,9 @@ for (var theme in templates)
        iterate({theme: theme, name: name, action: action}, templates[theme][name][action]);
 ```
 
-The size problem can be resolved by keeping a `size` property at each level in the structure which is modified when items are added to or removed from the structure. That property should be kept at each level since a sub-level map could be accessed through a partial key (e.g. `templates['Blue']`) and it is reasonable to assume that knowing the size of that sub-level map could be useful. The `size` property must also be kept in sync at all levels to ensure that a change at a lower level in the data structure is properly reflected at all levels above.
+The size problem can be resolved by keeping a `size` property at each level in the structure which is modified when items are added to or removed from the structure. That property should be kept at each level since a sub-level map could be accessed through a partial key (e.g. `templates['Blue']`) and the user might need to determine the size of that sub-level map. The `size` property must also be kept in sync at all levels to ensure that a change at a lower level in the data structure is properly reflected at all levels above.
 
-A generic version of this pattern which can work with any set of keys together with enhancements necessary for, among others, seamless iteration and size synchronisation, is implemented in the Map class of this project.
+A generic version of this pattern which can work with any set of keys together with enhancements necessary for, among others, iteration and size synchronisation, is implemented in the Map class of this project.
 
 Getting started
 ---------------
