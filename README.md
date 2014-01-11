@@ -1,9 +1,9 @@
-# About
-
+About
+=====
 A multi-key map implemention in Javascript which does not need a hash function.
 
-## Motivation
-
+Motivation
+----------
 It is easy to create a map of key-value pairs in Javascript using the object literal notation. Things become a little more complicated when you need to map a set of keys to values. Say, for example, you are building a client-side templating library with templates being selectable by theme, name and user action. You might structure your template list as follows:
 
 | Theme   | Name          | Action    | Template                      |
@@ -28,7 +28,8 @@ We could build a Hashmap data structure in Javascript but that would require a h
 
 To make things a little more interesting in the above templates example, we might need to load all templates for a specific theme, or with a specific theme and name but for any action. This cannot be achieved with a hashmap as values can only be retrieved with a complete key and not a partial one.
 
-## A simple solution
+A simple solution
+-----------------
 
 A simple solution to the above templating problem would be to nest objects with the top level object representing the first key level (theme), the 2nd level objects for the 2nd level key (name), and so on, as follows:
 
@@ -83,7 +84,8 @@ The size problem can be resolved by keeping a `size` property at each level in t
 
 A generic version of this pattern which can work with any set of keys together with enhancements necessary for, among others, seamless iteration and size synchronisation, is implemented in the Map class of this project.
 
-## Getting started
+Getting started
+---------------
 
 The map.js file exports the Map constructor. On the server-side, with Node.js, this is exported through `module.exports` and accessible with the `require` function. On the client-side, if *RequireJs* is being used, the constructor is registered as an anonymous module. If RequireJs is not present, the constructor is simply exported in a global variable `__vm__` as `__vm__.util.Map`. The following examples assume that the constructor is made available as a variable named `Map`. This can be set up as follows:
 

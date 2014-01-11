@@ -7,7 +7,7 @@
 (function(root, spec) {
   if (typeof define === "function" && define.amd) {
     // client-side with requireJs
-    define(["domReady!", "app/map"], spec);
+    define(["domReady!", "app/map.min"], spec);
   }
   else {
     // client-side without require JS
