@@ -1,7 +1,7 @@
 // Map jasmine unit tests
 // @author Vikash Madhow <vikash.madhow@gmail.com>
 // @license MIT
-// @version 0.1
+// @version 0.1.0
 'use strict';
 
 (function(root, spec) {
