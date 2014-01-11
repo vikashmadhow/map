@@ -127,7 +127,9 @@
     // The parent map of a sub-map or undefined if this map is at the top level.
     var parentMap = parent;
     
-    /** A key is normally an object with each property being a sub-key. E.g.
+    /** Given a key in string form, this method returns an equivalent key in object form. 
+      *
+      * A key is normally an object with each property being a sub-key. E.g.
       * `{a: "A", b: "B", c: "C"}`. The same key can be provided as a string as either
       * "A/B/C" where the order of each sub-key value is important or "a:A/b:B/c:C"
       * where any sub-key order may be used. Given a string key this method converts it
@@ -137,8 +139,8 @@
       * Both type of keys can be mixed with field names provided for only certain sub-keys,
       * e.g., A/b:B/C; the sub-keys without names will be matched to field by position.
       *
-      * A forward-slash and a colon appearing in a sub-key can be escaped by preceding each
-      * with a back-slash ('\/' & '\:', respectively).
+      * In string form, a forward-slash and a colon appearing in a sub-key can be escaped by 
+      * preceding each with a back-slash ('\/' & '\:', respectively).
       *
       * If the key is not a string, it is returned unchanged.
       *
@@ -171,7 +173,7 @@
       else return key;
     };    
     
-    /** This is the reverse of {@link module:Map.Map#toObjectKey}: given a key in object form it 
+    /** This is the inverse of {@link module:Map.Map#toObjectKey}: given a key in object form it 
       * returns an equivalent key in string form. If includePropertyNames is set to true
       * or not specified, the produced key will contain the property names for each sub-key.
       * 
@@ -208,7 +210,7 @@
     /** This method takes a prefix of the key structure and returns the sub-map reachable by
       * following that prefix. E.g., in a map with key structure `{a, b, c}`, `map.select("a:A")`
       * finds all mappings with a = A and returns the corresponding sub-map with the structure
-      * `b -> c -> values`. This sub-map implements get, put and select and can be further manipulated.
+      * `b -> c -> values`. This sub-map implements all methods of the top-level map and can be further manipulated.
       * Any changes to the sub-map will be reflected in the original map. When supplied with a full
       * key, select behaves exactly as {@link module:Map.Map#get}.
       *
@@ -223,8 +225,8 @@
       * structure.
       *
       * @param {string|object} key - The prefix (or full) key to select.
-      * @param {boolean} [createSubMaps] - Whether to automatically along the path of a selected
-      *                                    key. Defaults to true.
+      * @param {boolean} [createSubMaps] - Whether to automatically create submaps along the path of a
+      *                                    selected key. Defaults to true.
       * @returns {Map|*} Either the sub-map reachable by following the prefix key supplied or,
       *          if a full key is supplied, the value associated to it (or undefined
       *          if no such association exists).
@@ -256,7 +258,7 @@
       * defaultValue is a function, execute it with this map as context and return
       * its return value. 
       * 
-      * Missing sub-keys  in the key are assumed to be equal to the defaultSubKeyValue 
+      * Missing sub-keys in the key are assumed to be equal to the defaultSubKeyValue 
       * supplied on construction ("_" by default).
       *
       * @param {object|string} key - The key whose associated value is sought.
