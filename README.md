@@ -119,7 +119,7 @@ var friends = Map.create(["firstName", "lastName"]);
 
 ### Putting and retrieving items in the map
 
-Use the put and get methods for these operations. Keys can be specified in object and string form:
+Use the put and get methods for these operations. Keys can be specified in object or string form:
 
 ```javascript
 templates.put({theme: "Blue", name: "Customer", action: "Add"}, "<form><div>...</div></form>");
