@@ -1,6 +1,6 @@
 About
 =====
-A multi-key map implemention in Javascript which does not need a hash function.
+A multi-key map implementation in Javascript which does not need a hash function.
 
 Motivation
 ----------
