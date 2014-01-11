@@ -87,7 +87,7 @@ A generic version of this pattern which can work with any set of keys together w
 Getting started
 ---------------
 
-The map.js file exports the Map constructor. On the server-side, with Node.js, this is exported through `module.exports` and accessible with the `require` function. On the client-side, if **RequireJs** is being used, the constructor is registered as an anonymous module. If RequireJs is not present, the constructor is simply exported in a global variable `__vm__` as `__vm__.util.Map`. The following examples assume that the constructor is made available as a variable named `Map`. This can be set up as follows:
+The map.js file exports the `Map` constructor. On the server-side, with Node.js, this is exported through `module.exports` and accessible with the `require` function. On the client-side, if **RequireJs** is being used, the constructor is registered as an anonymous module. If RequireJs is not present, the constructor is simply exported in a global variable `__vm__` as `__vm__.util.Map`. The following examples assume that the constructor is made available as a variable named `Map`. This can be set up as follows:
 
 ```javascript
 // with RequireJs
@@ -169,7 +169,7 @@ templates.each(function(key, value, map) {
 Testing
 --------
 
-Unit testing with Jasmine is included in the test folder. Simply open the`test/SpecRunner.html` or `test/SpecRunnerWithAMD.html` in a browser to execute the tests. The map specification is in the `test/spec/mapSpec.js` file.
+Unit testing with **Jasmine** is included in the test folder. Simply open the`test/SpecRunner.html` or `test/SpecRunnerWithAmd.html` in a browser to execute the tests. The map specification is in the `test/spec/mapSpec.js` file.
 
 Docs
 --------
