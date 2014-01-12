@@ -1,7 +1,7 @@
 // Map jasmine unit tests
 // @author Vikash Madhow <vikash.madhow@gmail.com>
 // @license MIT
-// @version 0.1.0
+// @version 0.1.1
 'use strict';
 
 (function(root, spec) {
@@ -190,11 +190,13 @@
       var expected = ["a:1/b:2/c:3", "a:One/b:Two/c:Three", "a:5/b:6/c:7", "a:Five/b:Six/c:Seven"];
       for (var i = 0; i < keys.length; i++) {
         expect(expected).toContain(keys[i]);
+        expected.splice(expected.indexOf(keys[i]), 1);
       }
 
       expected = ["4", "Four", "8", "Eight"];
       for (var i = 0; i < values.length; i++) {
         expect(expected).toContain(values[i]);
+        expected.splice(expected.indexOf(values[i]), 1);
       }
     });
 
