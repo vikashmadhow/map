@@ -426,7 +426,7 @@
       *                                map as parameters and returning true if the current entry
       *                                (key-value pair) should be included in the filtered map,
       *                                false otherwise.
-      * @param {*} [context] - The optional value of `this` in the iterator function;
+      * @param {*} [context] - The optional value of `this` in the predicate function;
       *                        defaults to the current map.
       */
     this.filter = function(predicate, context) {
