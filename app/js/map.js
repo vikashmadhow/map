@@ -27,7 +27,7 @@
   *
   * @author Vikash Madhow <vikash.madhow@gmail.com>
   * @license MIT
-  * @version 0.1.0
+  * @version 0.2.0
   */
 'use strict';
 
@@ -400,7 +400,7 @@
       return k;
     }
     
-    /** @return {*[]} An array of all values in the map. If the map contains duplicate
+    /** @return {object[]} An array of all values in the map. If the map contains duplicate
       *               values, so will this array. */
     this.values = function() {
       var val = [];
