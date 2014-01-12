@@ -408,6 +408,36 @@
       return val;
     }
     
+    /** A callback invoked during filtering with {@link module:Map.Map#filter}.
+      * It should returns true if the current entry should be included in the 
+      * filtered map, false otherwise.
+      *
+      * @callback Predicate
+      * @param {object} key - The key of the mapping being iterated upon.
+      * @param {*} value - The value of the mapping being iterated upon.
+      * @param {Map} map - The map being iterated upon.
+      * @return {boolean} True if the current entry should be included in the 
+      *                   filtered map, false otherwise.
+      */
+
+    /** Returns a new map containing only those entries which passed the predicate function. 
+      * 
+      * @param {Predicate} predicate - A predicate function taking the current key, value and
+      *                                map as parameters and returning true if the current entry
+      *                                (key-value pair) should be included in the filtered map,
+      *                                false otherwise.
+      * @param {*} [context] - The optional value of `this` in the iterator function;
+      *                        defaults to the current map.
+      */
+    this.filter = function(predicate, context) {
+      var filtered = new Map(fields, defaultSubKeyValue);
+      this.each(function(key, value, map) {
+        if (predicate.call(this, key, value, map))
+          filtered.put(key, value);
+      }, context);
+      return filtered;
+    }
+    
     /** A callback invoked during iteration with {@link module:Map.Map#each}.
       *
       * @callback Iterator

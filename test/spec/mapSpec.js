@@ -39,7 +39,7 @@
               if (index < 0) return false;
               else           ex.splice(index, 1);
             }
-            return true;
+            return ex.length === 0;
           }
           else return false;
 
@@ -212,7 +212,8 @@
       map.each(function(key, value, map) {
         keys.push(map.toStringKey(key));
         values.push(value);
-      });
+        expect(this).toEqual("CTX");
+      }, "CTX");
       
       expect(keys).toContainAll(["a:1/b:2/c:3", "a:One/b:Two/c:Three", "a:5/b:6/c:7", "a:Five/b:Six/c:Seven"]);
       expect(values).toContainAll(["4", "Four", "8", "Eight"]);
@@ -292,7 +293,7 @@
     });
     
     // filter
-    xit ('supports filtering', function() {
+    it ('supports filtering', function() {
       map.put("1/2/3", "4");
       map.put("1/2/4", "5");
       map.put("One/Two/Three", "Four");
@@ -300,7 +301,10 @@
       map.put("5/7/6", "8");
       map.put("Five/Six/Seven", "Eight");
       
-      var filtered = map.filter();
+      // filter those whose first key element is a number of their values are numbers
+      var filtered = map.filter(function(k, v) { return +k.a == k.a || v == +v });
+      expect(filtered.keys(true)).toContainAll(["a:1/b:2/c:3", "a:1/b:2/c:4", "a:5/b:6/c:7", "a:5/b:7/c:6"]);
+      expect(filtered.values()).toContainAll(["4", "5", "8", "8"]);
     });
     
   });  
