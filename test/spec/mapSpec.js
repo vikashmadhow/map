@@ -1,13 +1,13 @@
 // Map jasmine unit tests
 // @author Vikash Madhow <vikash.madhow@gmail.com>
 // @license MIT
-// @version 0.1.1
+// @version 0.2.0
 'use strict';
 
 (function(root, spec) {
   if (typeof define === "function" && define.amd) {
     // client-side with requireJs
-    define(["domReady!", "app/map.min"], spec);
+    define(["domReady!", "app/map"], spec);
   }
   else {
     // client-side without require JS
@@ -23,7 +23,37 @@
 
     beforeEach(function() {
       map = new Map({a: "A", b: "B", c: "C"});
+      
+      // Custom matchers
+      this.addMatchers({
+       
+        // Return true if two arrays have the same contents, irrespective of order.
+        toContainAll: function(expected) {
+          var actual = this.actual;
+          var notText = this.isNot ? " not" : "";
+          
+          if (Array.isArray(actual) && Array.isArray(expected) && actual.length === expected.length) {
+            var ex = expected.slice();
+            for (var i = 0; i < actual.length; i++) {
+              var index = ex.indexOf(actual[i]);
+              if (index < 0) return false;
+              else           ex.splice(index, 1);
+            }
+            return true;
+          }
+          else return false;
+
+          // failure message
+          this.message = function () {
+            return !Array.isArray(actual)   ? actual + " is not an array" :
+                   !Array.isArray(expected) ? expected + " is not an array" :
+                   actual.length !== expected.length ? actual + " does not have the same number of elements as " + expected :
+                   "Expected " + actual + notText + " to contain all elements in " + expected;
+          }
+        }
+      });
     });
+    
 
     it('allows get/put with object keys following the key structure specified on creation', function() {
       expect(map.get({a: "One", b: "Two", c: "Three"})).toBeUndefined();
@@ -184,20 +214,8 @@
         values.push(value);
       });
       
-      expect(keys.length).toEqual(map.size());
-      expect(values.length).toEqual(map.size());
-      
-      var expected = ["a:1/b:2/c:3", "a:One/b:Two/c:Three", "a:5/b:6/c:7", "a:Five/b:Six/c:Seven"];
-      for (var i = 0; i < keys.length; i++) {
-        expect(expected).toContain(keys[i]);
-        expected.splice(expected.indexOf(keys[i]), 1);
-      }
-
-      expected = ["4", "Four", "8", "Eight"];
-      for (var i = 0; i < values.length; i++) {
-        expect(expected).toContain(values[i]);
-        expected.splice(expected.indexOf(values[i]), 1);
-      }
+      expect(keys).toContainAll(["a:1/b:2/c:3", "a:One/b:Two/c:Three", "a:5/b:6/c:7", "a:Five/b:Six/c:Seven"]);
+      expect(values).toContainAll(["4", "Four", "8", "Eight"]);
     });
 
     // test string key to object form
@@ -249,6 +267,40 @@
       expect(submap.get("3")).toBeUndefined();
       expect(map.get("1/2/3")).toBeUndefined();
       expect(map.select("1/2").get("3")).toBeUndefined();
+    });
+    
+    // keys
+    it('allows all keys to be extracted', function() {
+      map.put("1/2/3", "4");
+      map.put("One/Two/Three", "Four");
+      map.put("5/6/7", "8");
+      map.put("Five/Six/Seven", "Eight");
+      
+      expect(map.keys(true)).toContainAll(["a:1/b:2/c:3", "a:One/b:Two/c:Three", "a:5/b:6/c:7", "a:Five/b:Six/c:Seven"]);
+    });
+    
+    // values
+    it('allows all values to be extracted', function() {
+      map.put("1/2/3", "4");
+      map.put("1/2/4", "5");
+      map.put("One/Two/Three", "Four");
+      map.put("5/6/7", "8");
+      map.put("5/7/6", "8");
+      map.put("Five/Six/Seven", "Eight");
+      
+      expect(map.values()).toContainAll(["4", "5", "Four", "8", "8", "Eight"]);
+    });
+    
+    // filter
+    xit ('supports filtering', function() {
+      map.put("1/2/3", "4");
+      map.put("1/2/4", "5");
+      map.put("One/Two/Three", "Four");
+      map.put("5/6/7", "8");
+      map.put("5/7/6", "8");
+      map.put("Five/Six/Seven", "Eight");
+      
+      var filtered = map.filter();
     });
     
   });  

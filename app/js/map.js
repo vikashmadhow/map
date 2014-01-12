@@ -384,7 +384,30 @@
         }
       }
     }
-
+    
+    /** Returns an array of all the keys in the map. If the stringForm parameter
+      * is provided and is true, the keys are returned in string form; otherwise
+      * they are returned in object form.
+      *
+      * @param {boolean} [stringForm] - Whether to return the keys in string or object form.
+      *                               Defaults to false (object form).
+      * @return {object[]|string[]} an array of all the keys in the map. 
+      */
+    this.keys = function(stringForm) {
+      stringForm = typeof stringForm === "undefined" ? false : stringForm;
+      var k = [];
+      this.each(function(key) { k.push(stringForm ? this.toStringKey(key) : key); }, this);
+      return k;
+    }
+    
+    /** @return {*[]} An array of all values in the map. If the map contains duplicate
+      *               values, so will this array. */
+    this.values = function() {
+      var val = [];
+      this.each(function(k, v) { val.push(v); });
+      return val;
+    }
+    
     /** A callback invoked during iteration with {@link module:Map.Map#each}.
       *
       * @callback Iterator
