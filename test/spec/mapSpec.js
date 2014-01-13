@@ -282,7 +282,7 @@
     });
     
     // fields
-    it ('supports the extraction of the key fields', function() {
+    it ('allows a copy of the fields in the key structure to be accessed', function() {
       expect(map.fields()).toBeEqualArrayTo(["a", "b", "c"]);
     });
     
