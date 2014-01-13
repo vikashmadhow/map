@@ -50,15 +50,16 @@ with field names provided for only certain sub-keys, e.g., A/b:B/C; the sub-keys
 names will be matched to properties in the key structure of the map by position. A
 forward-slash and a colon appearing in a sub-key can be escaped by preceding each with
 a back-slash ('\/' &amp; '\:', respectively).</p>
-<p>The map also has a <code>select</code> method which takes a prefix of the key structure and returns
-the sub-map reachable by following that prefix. E.g., in the map above, <code>map.select(&quot;a:A&quot;)</code>
+<p>The map also has an <code>of</code> method which takes a prefix of the key structure and returns
+the sub-map reachable by following that prefix. E.g., in the map above, <code>map.of(&quot;a:A&quot;)</code>
 finds all mappings with a = A and returns the corresponding sub-map with the structure
-<code>b -&gt; c -&gt; values</code>. This sub-map implements get, put and select and can be further manipulated.
+<code>b -&gt; c -&gt; values</code>. This sub-map implements all map methods and can be further manipulated.
 Any changes to the sub-map will be reflected in the original map. When supplied with a full
-key, select behaves exactly as get. Only consecutive sub-keys are followed; e.g., in
-<code>map.select(&quot;a:A/c:C&quot;)</code>, the sub-key value c = C will not be followed as it does not follow
-the sub-key <code>a</code>. For maps with very deep structure, select can be used to increase performance
-when the prefix part of a key is fixed in a certain context (such as, e.g., inside a loop).</p></div>
+key, <code>of</code> behaves exactly as get. Only consecutive sub-keys are followed; e.g., in
+<code>map.of(&quot;a:A/c:C&quot;)</code>, the sub-key value c = C will not be followed as it does not follow
+the sub-key <code>a</code>. For maps with many fields in its key structure, the <code>of</code> method can be used 
+to increase performance when the prefix part of a key is fixed in a certain context 
+(such as, e.g., inside a loop).</p></div>
     
 </header>  
 
@@ -201,7 +202,7 @@ when the prefix part of a key is fixed in a certain context (such as, e.g., insi
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line92">line 92</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line93">line 93</a>
     </li></ul></dd>
     
     
@@ -252,9 +253,9 @@ when the prefix part of a key is fixed in a certain context (such as, e.g., insi
 <dd>
     
     <div class="description">
-        <p>Clears the map of all key-value associations. Clearing a sub-map obtained by
-selecting on a parent map will also clear all corresponding key-value pairs from 
-the parent map.</p>
+        <p>Clears the map of all key-value associations. Clearing a sub-map obtained from
+a parent map (through the <a href="module-Map.Map.html#of">module:Map.Map#of</a> method) will also clear all 
+corresponding key-value pairs from the parent map.</p>
 <p><strong>Alias: removeAll</strong></p>
     </div>
     
@@ -284,7 +285,7 @@ the parent map.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line381">line 381</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line382">line 382</a>
     </li></ul></dd>
     
     
@@ -445,7 +446,7 @@ with the specified structure and optional default sub-key value.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line507">line 507</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line508">line 508</a>
     </li></ul></dd>
     
     
@@ -587,7 +588,7 @@ with the specified structure and optional default sub-key value.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line314">line 314</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line315">line 315</a>
     </li></ul></dd>
     
     
@@ -773,7 +774,7 @@ map.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line464">line 464</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line465">line 465</a>
     </li></ul></dd>
     
     
@@ -838,7 +839,7 @@ map.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line213">line 213</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line214">line 214</a>
     </li></ul></dd>
     
     
@@ -1027,7 +1028,7 @@ returns true.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line438">line 438</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line439">line 439</a>
     </li></ul></dd>
     
     
@@ -1197,7 +1198,7 @@ supplied on construction (&quot;_&quot; by default).</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line276">line 276</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line277">line 277</a>
     </li></ul></dd>
     
     
@@ -1372,7 +1373,7 @@ supplied on construction (&quot;_&quot; by default).</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line300">line 300</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line301">line 301</a>
     </li></ul></dd>
     
     
@@ -1527,7 +1528,7 @@ they are returned in object form.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line401">line 401</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line402">line 402</a>
     </li></ul></dd>
     
     
@@ -1729,7 +1730,7 @@ structure.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line239">line 239</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line240">line 240</a>
     </li></ul></dd>
     
     
@@ -1901,7 +1902,7 @@ sub-keys are assumed to be equal to the defaultSubKeyValue supplied on construct
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line324">line 324</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line325">line 325</a>
     </li></ul></dd>
     
     
@@ -2045,7 +2046,7 @@ remove the corresponding key-value pair from the parent map.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line354">line 354</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line355">line 355</a>
     </li></ul></dd>
     
     
@@ -2132,7 +2133,7 @@ remove the corresponding key-value pair from the parent map.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line345">line 345</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line346">line 346</a>
     </li></ul></dd>
     
     
@@ -2285,7 +2286,7 @@ preceding each with a back-slash ('\/' &amp; '\:', respectively).</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line150">line 150</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line151">line 151</a>
     </li></ul></dd>
     
     
@@ -2471,7 +2472,7 @@ or not specified, the produced key will contain the property names for each sub-
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line187">line 187</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line188">line 188</a>
     </li></ul></dd>
     
     
@@ -2565,7 +2566,7 @@ or not specified, the produced key will contain the property names for each sub-
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line410">line 410</a>
+        <a href="map.js.html">D:/repos/map/app/js/map.js</a>, <a href="map.js.html#line411">line 411</a>
     </li></ul></dd>
     
     
@@ -2635,7 +2636,7 @@ or not specified, the produced key will contain the property names for each sub-
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha2</a> on Mon Jan 13 2014 05:56:07 GMT+0400 (Mauritius Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha2</a> on Mon Jan 13 2014 12:14:31 GMT+0400 (Mauritius Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
