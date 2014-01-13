@@ -1,21 +1,21 @@
 // Map jasmine unit tests
 // @author Vikash Madhow <vikash.madhow@gmail.com>
 // @license MIT
-// @version 0.2.0
 'use strict';
 
 (function(root, spec) {
   if (typeof define === "function" && define.amd) {
     // client-side with requireJs
-    define(["domReady!", "app/map"], spec);
+    define(["domReady!", "test/customMatchers", "app/map"], spec);
   }
   else {
     // client-side without require JS
     window.addEventListener('DOMContentLoaded', function() {
-      spec(document, root.__vm__.util.Map);
+      var util = root.__vm__.util;
+      spec(document, util.test.customMatchers, util.Map);
     });
   }
-})(this, function(document, Map) {
+})(this, function(document, customMatchers, Map) {
   
   describe('Map', function() {
 
@@ -24,43 +24,17 @@
     beforeEach(function() {
       map = new Map({a: "A", b: "B", c: "C"});
       
-      // Custom matchers
-      this.addMatchers({
-       
-        // Return true if two arrays have the same contents, irrespective of order.
-        toContainAll: function(expected) {
-          var actual = this.actual;
-          var notText = this.isNot ? " not" : "";
-          
-          if (Array.isArray(actual) && Array.isArray(expected) && actual.length === expected.length) {
-            var ex = expected.slice();
-            for (var i = 0; i < actual.length; i++) {
-              var index = ex.indexOf(actual[i]);
-              if (index < 0) return false;
-              else           ex.splice(index, 1);
-            }
-            return ex.length === 0;
-          }
-          else return false;
-
-          // failure message
-          this.message = function () {
-            return !Array.isArray(actual)   ? actual + " is not an array" :
-                   !Array.isArray(expected) ? expected + " is not an array" :
-                   actual.length !== expected.length ? actual + " does not have the same number of elements as " + expected :
-                   "Expected " + actual + notText + " to contain all elements in " + expected;
-          }
-        }
-      });
+      // Init custom matchers
+      customMatchers(this);
     });
     
-
     it('allows get/put with object keys following the key structure specified on creation', function() {
       expect(map.get({a: "One", b: "Two", c: "Three"})).toBeUndefined();
       map.put({a: "One", b: "Two", c: "Three"}, "Four");
       expect(map.get({a: "One", b: "Two", c: "Three"})).toEqual("Four");
       
-      map.put("1/2/3", "4");
+      // map.put("1/2/3", "4");
+      map.put({a:1, b:2, c:3}, "4");
       map.put("1/2/4", "5");
       map.put("5/6/7", "8");
       map.put("Five/Six/Seven", "Eight");
@@ -100,15 +74,15 @@
     
     it('allows selection of sub-maps', function() {
       map.put({a: "One", b: "Two", c: "Three"}, "Four");
-      expect(map.select({a: "One"}).get({b: "Two", c: "Three"})).toEqual("Four"); 
-      expect(map.select({a: "One", b: "Two"}).get({c: "Three"})).toEqual("Four"); 
-      expect(map.select({a: "One", b: "Two", c: "Three"})).toEqual("Four"); 
+      expect(map.of({a: "One"}).get({b: "Two", c: "Three"})).toEqual("Four"); 
+      expect(map.of({a: "One", b: "Two"}).get({c: "Three"})).toEqual("Four"); 
+      expect(map.of({a: "One", b: "Two", c: "Three"})).toEqual("Four"); 
     });
     
     it('auto-creates sub-maps on selection', function() {
-      expect(map.select("A/B/C")).toBeUndefined();
+      expect(map.of("A/B/C")).toBeUndefined();
     
-      var submap = map.select("A/B");
+      var submap = map.of("A/B");
       expect(submap).not.toBeUndefined();
       expect(submap.size()).toEqual(0);
       
@@ -154,24 +128,24 @@
       expect(map.size()).toEqual(0);
       map.put({a: "A", b: "B", c: "C"}, "D");
       expect(map.size()).toEqual(1);
-      expect(map.select("A").size()).toEqual(1);
-      expect(map.select("A/B").size()).toEqual(1);
+      expect(map.of("A").size()).toEqual(1);
+      expect(map.of("A/B").size()).toEqual(1);
       
       map.put({a: "A", b: "C", c: "C"}, "D");
       expect(map.size()).toEqual(2);
-      expect(map.select("A").size()).toEqual(2);
-      expect(map.select("A/B").size()).toEqual(1);
-      expect(map.select("A/C").size()).toEqual(1);
+      expect(map.of("A").size()).toEqual(2);
+      expect(map.of("A/B").size()).toEqual(1);
+      expect(map.of("A/C").size()).toEqual(1);
     });
     
     it('keeps the size of the parent map consistent when keys are added to a sub-map', function() {
       expect(map.size()).toEqual(0);
       map.put({a: "A", b: "B", c: "C"}, "D");
       expect(map.size()).toEqual(1);
-      expect(map.select("A").size()).toEqual(1);
-      expect(map.select("A/B").size()).toEqual(1);
+      expect(map.of("A").size()).toEqual(1);
+      expect(map.of("A/B").size()).toEqual(1);
       
-      var submap = map.select("A/B");
+      var submap = map.of("A/B");
       submap.put("D", "E");
       expect(submap.size()).toEqual(2);
       expect(map.size()).toEqual(2);
@@ -258,7 +232,7 @@
       map.put("Five/Six/Seven", "Eight");
       expect(map.size()).toEqual(6);
       
-      var submap = map.select("1/2");
+      var submap = map.of("1/2");
       expect(submap.size()).toEqual(2);
       expect(submap.get("3")).toEqual("4");
       expect(submap.get("4")).toEqual("5");
@@ -267,7 +241,7 @@
       expect(map.size()).toEqual(4);
       expect(submap.get("3")).toBeUndefined();
       expect(map.get("1/2/3")).toBeUndefined();
-      expect(map.select("1/2").get("3")).toBeUndefined();
+      expect(map.of("1/2").get("3")).toBeUndefined();
     });
     
     // keys
@@ -301,10 +275,15 @@
       map.put("5/7/6", "8");
       map.put("Five/Six/Seven", "Eight");
       
-      // filter those whose first key element is a number of their values are numbers
+      // filter map entries whose first key element is a number or their values are numbers
       var filtered = map.filter(function(k, v) { return +k.a == k.a || v == +v });
       expect(filtered.keys(true)).toContainAll(["a:1/b:2/c:3", "a:1/b:2/c:4", "a:5/b:6/c:7", "a:5/b:7/c:6"]);
       expect(filtered.values()).toContainAll(["4", "5", "8", "8"]);
+    });
+    
+    // fields
+    it ('supports the extraction of the key fields', function() {
+      expect(map.fields()).toBeEqualArrayTo(["a", "b", "c"]);
     });
     
   });  

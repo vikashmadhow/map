@@ -135,7 +135,7 @@ var template = templates.get("Default/Customer/Add");
 
 ### Selecting a partial map
 
-A sub-level map can be selected by supplying a prefix of a key to the `select` method. Any modifications to the sub-level map will be reflected at higher levels. E.g.:
+A sub-level map can be selected by supplying a prefix of a key to the `of` method. Any modifications to the sub-level map will be reflected at higher levels. E.g.:
 
 ```javascript
 // get blue customer templates and add a new template into it
@@ -143,7 +143,7 @@ A sub-level map can be selected by supplying a prefix of a key to the `select` m
 // increase by 1
 
 var templatesSize = templates.size();
-var blueCustomer = templates.select('Blue/Customer');
+var blueCustomer = templates.of('Blue/Customer');
 var blueCustomerSize = blueCustomer.size();
 
 // When putting and retrieving in a sub-level map, higher-level

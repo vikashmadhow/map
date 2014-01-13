@@ -27,7 +27,7 @@
   *
   * @author Vikash Madhow <vikash.madhow@gmail.com>
   * @license MIT
-  * @version 0.2.0
+  * @version 0.3.0
   */
 'use strict';
 
@@ -72,15 +72,16 @@
     * forward-slash and a colon appearing in a sub-key can be escaped by preceding each with
     * a back-slash ('\/' & '\:', respectively).
     *
-    * The map also has a `select` method which takes a prefix of the key structure and returns
-    * the sub-map reachable by following that prefix. E.g., in the map above, `map.select("a:A")`
+    * The map also has an `of` method which takes a prefix of the key structure and returns
+    * the sub-map reachable by following that prefix. E.g., in the map above, `map.of("a:A")`
     * finds all mappings with a = A and returns the corresponding sub-map with the structure
-    * `b -> c -> values`. This sub-map implements get, put and select and can be further manipulated.
+    * `b -> c -> values`. This sub-map implements all map methods and can be further manipulated.
     * Any changes to the sub-map will be reflected in the original map. When supplied with a full
-    * key, select behaves exactly as get. Only consecutive sub-keys are followed; e.g., in
-    * `map.select("a:A/c:C")`, the sub-key value c = C will not be followed as it does not follow
-    * the sub-key `a`. For maps with very deep structure, select can be used to increase performance
-    * when the prefix part of a key is fixed in a certain context (such as, e.g., inside a loop).
+    * key, `of` behaves exactly as get. Only consecutive sub-keys are followed; e.g., in
+    * `map.of("a:A/c:C")`, the sub-key value c = C will not be followed as it does not follow
+    * the sub-key `a`. For maps with many fields in its key structure, the `of` method can be used 
+    * to increase performance when the prefix part of a key is fixed in a certain context 
+    * (such as, e.g., inside a loop).
     *
     * @param {object} structure - The key structure of the map. This can be supplied either as an object, 
     *                             with each non-function property in enumeration order becoming a sub-key 
@@ -206,32 +207,37 @@
       }
       else return key;
     }
+    
+    /** @return {string[]} a copy of the key structure of this map as an array of string
+      *                    where each string is a name of a field in the key structure in
+      *                    proper order. */
+    this.fields = function() { return fields.slice() };
 
     /** This method takes a prefix of the key structure and returns the sub-map reachable by
-      * following that prefix. E.g., in a map with key structure `{a, b, c}`, `map.select("a:A")`
+      * following that prefix. E.g., in a map with key structure `{a, b, c}`, `map.of("a:A")`
       * finds all mappings with a = A and returns the corresponding sub-map with the structure
-      * `b -> c -> values`. This sub-map implements all methods of the top-level map and can be further manipulated.
-      * Any changes to the sub-map will be reflected in the original map. When supplied with a full
-      * key, select behaves exactly as {@link module:Map.Map#get}.
+      * `b -> c -> values`. This sub-map implements all methods of the top-level map and can be 
+      * further manipulated. Any changes to the sub-map will be reflected in the original map. 
+      * When supplied with a full key, `of` behaves exactly as {@link module:Map.Map#get}.
       *
       * If the optional createSubMaps parameter is set to true (or not provided, in which case it
       * defaults to true), this method will automatically create submaps along the path of the
-      * selected key if such did not exist previously. E.g. `map.select("A/B", false)` will return
-      * `undefined` on an empty map. However, `map.select("A/B").put("C", "D")` is valid on the same
-      * empty map as the select method would create the necessary submaps along the path `"A/B"`.
+      * supplied key if such did not exist previously. E.g. `map.of("A/B", false)` will return
+      * `undefined` on an empty map. However, `map.of("A/B").put("C", "D")` is valid on the same
+      * empty map as this method would create the necessary submaps along the path `"A/B"`.
       *
-      * Note that only consecutive sub-keys are followed; e.g., in `map.select("a:A/c:C")`, the
+      * Note that only consecutive sub-keys are followed; e.g., in `map.of("a:A/c:C")`, the
       * sub-key value c = C will not be followed as it does not follow the sub-key `a` in the key
       * structure.
       *
-      * @param {string|object} key - The prefix (or full) key to select.
+      * @param {string|object} key - The prefix (or full) key to follow.
       * @param {boolean} [createSubMaps] - Whether to automatically create submaps along the path of a
-      *                                    selected key. Defaults to true.
+      *                                    followed key. Defaults to true.
       * @returns {Map|*} Either the sub-map reachable by following the prefix key supplied or,
       *          if a full key is supplied, the value associated to it (or undefined
       *          if no such association exists).
       */
-    this.select = function(key, createSubMaps) {
+    this.of = function(key, createSubMaps) {
       if (typeof createSubMaps === 'undefined') createSubMaps = true;
       
       key = this.toObjectKey(key);
@@ -243,11 +249,11 @@
           if (typeof value === 'undefined') {
             if (createSubMaps) {
               records[subKey] = new Map(fields.slice(1), defaultSubKeyValue, this);
-              return records[subKey].select(key);
+              return records[subKey].of(key);
             }
             else return undefined;
           }
-          else return value.select(key);     
+          else return value.of(key);     
         }
       }
       else return this;
@@ -269,7 +275,7 @@
       *              return value (if it is a function) or, barring all this, undefined.
       */
     this.get = function(key, defaultValue) { 
-      var value = this.select(defaults(key, defaultKey), false);
+      var value = this.of(defaults(key, defaultKey), false);
       if (typeof value !== 'undefined')             return value;
       else if (typeof defaultValue === 'function')  return defaultValue.call(this);
       else                                          return defaultValue;
@@ -293,7 +299,7 @@
       *              return value (if it is a function) or, barring all this, undefined.
       */
     this.getOrElseUpdate = function(key, value) {
-      var existing = this.select(defaults(key, defaultKey), false);
+      var existing = this.of(defaults(key, defaultKey), false);
       if (typeof existing === 'undefined') {
         existing = typeof value === 'function' ? value.call(this) : value;
         if (typeof existing !== 'undefined') this.put(key, existing);
@@ -340,8 +346,8 @@
     this.size = function() { return size; };
     
     /** Removes the key and its associated value from the map. Removing a key from a sub-map 
-      * obtained by selecting on a parent map will also remove the corresponding key-value pair
-      * from the parent map.
+      * obtained from a parent map (through the {@link module:Map.Map#of} method) will also 
+      * remove the corresponding key-value pair from the parent map.
       *
       * @param {string|object} key The key to remove from the map. 
       * @return {*} The value previously associated to the key or undefined if none. 
@@ -367,9 +373,9 @@
       else return undefined;
     };
     
-    /** Clears the map of all key-value associations. Clearing a sub-map obtained by
-      * selecting on a parent map will also clear all corresponding key-value pairs from 
-      * the parent map.
+    /** Clears the map of all key-value associations. Clearing a sub-map obtained from
+      * a parent map (through the {@link module:Map.Map#of} method) will also clear all 
+      * corresponding key-value pairs from the parent map.
       *
       * **Alias: removeAll**
       */
@@ -401,7 +407,7 @@
     }
     
     /** @return {object[]} An array of all values in the map. If the map contains duplicate
-      *               values, so will this array. */
+      *                    values, so will this array. */
     this.values = function() {
       var val = [];
       this.each(function(k, v) { val.push(v); });
@@ -420,7 +426,8 @@
       *                   filtered map, false otherwise.
       */
 
-    /** Returns a new map containing only those entries which passed the predicate function. 
+    /** Returns a new map containing only existing entries for which the predicate function
+      * returns true. 
       * 
       * @param {Predicate} predicate - A predicate function taking the current key, value and
       *                                map as parameters and returning true if the current entry
@@ -471,7 +478,7 @@
     };
     
     // Used internally to increase size variable and propagate size changes to parent maps 
-    // when items are added directly to a sub-map obtained from a select on a parent map. 
+    // when items are added directly to a sub-map obtained from a parent map. 
     // INTERNAL USE ONLY.
     this.__incrementSize = function() {
       size++;
@@ -479,7 +486,7 @@
     };
     
     // Used internally to decrease size variable and propagate size changes to parent maps 
-    // when items are removed directly from a sub-map obtained from a select on a parent map. 
+    // when items are removed directly from a sub-map obtained from a parent map. 
     // INTERNAL USE ONLY.
     this.__decrementSize = function() {
       size--; 
